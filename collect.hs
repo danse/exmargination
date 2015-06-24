@@ -26,11 +26,6 @@ analyse collection = Analysis { date=date, averages=averages }
   where date = time (head collection),
         averages = collectionToAverages collection
 
-data Folded = Folded {
-  analyses :: [Analysis],
-  collection :: [Ex.Margin]
-}
-
 collect :: [Ex.Margin] -> [Analysis]
 collect margins
   | len margins > 1 = firstAnalysis : ((analyse . tail) margins)
@@ -39,3 +34,4 @@ collect margins
   where firstAnalysis = analyse margins
 
 convert = collect . Ex.toDailySeries
+          
