@@ -15,8 +15,13 @@ build-type:          Simple
 extra-source-files:  README.md
 cabal-version:       >=1.10
 
+executable exmargination-collection
+ main-is: exmargination-collection.hs
+ build-depends:       base >=4.6 && <4.7, datetime, time, aeson, bytestring
+
+
 library
-  exposed-modules:     ToTimeSeries,Exmargination,Collect
+  exposed-modules:     ToTimeSeries, Exmargination, Collect
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.6 && <4.7, datetime, time, aeson, bytestring
