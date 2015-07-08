@@ -8,7 +8,7 @@ main = do
     then
     do
       prog <- getProgName
-      putStrLn $ "usage: " ++ prog ++ "<margin> <result>"
+      putStrLn $ "usage: " ++ prog ++ " <margin> <result>"
       putStrLn $ "this will read the `margin` file, convert and write to `result`"
     else
     let [input, output] = args
