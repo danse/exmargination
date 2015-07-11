@@ -15,3 +15,7 @@ main = hspec $ do
       input <- readFile "fixtures/1/input.json"
       output <- readFile "fixtures/1/output.json"
       (convert (pack input)) `shouldBe` (decodeAnalyses (pack output))
+    it "converts input with a first element in wrong date order" $ do
+      input <- readFile "fixtures/3/input.json"
+      output <- readFile "fixtures/3/output.json"
+      (convert (pack input)) `shouldBe` (decodeAnalyses (pack output))

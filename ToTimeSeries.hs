@@ -33,6 +33,7 @@ sorter acc = sortBy (\ x y -> compare (acc x) (acc y))
 
 convert :: Filler a -> Merger a -> Accessor a -> NominalDiffTime -> [a] -> [a]
 convert creator merger acc interval elements =
-  sampler $ sorter acc elements
-  where times = iterator interval (acc (head elements))
+  sampler sorted
+  where sorted = sorter acc elements
+        times = iterator interval (acc (head sorted))
         sampler = consume creator acc merger times
