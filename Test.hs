@@ -1,21 +1,23 @@
 import Test.Hspec
-import Exmargination( Margin, toDailySeries )
-import Collect( convert, decodeAnalyses, Analysis )
+import Collect( convert )
 import Data.ByteString.Lazy.Char8( pack )
 import Data.Aeson( eitherDecode )
+import Data.Functor( fmap )
+
+-- i cannot reuse the eitherDecode, because the resulting function
+-- would have the same type signature, while i need different types
+-- for analyses and margins
+convertDecoded input = fmap convert (eitherDecode (pack input))
+decoded = eitherDecode . pack 
+
+runCase num = do
+  input  <- readFile $ "fixtures/"++ num ++"/input.json"
+  output <- readFile $ "fixtures/"++ num ++"/output.json"
+  (convertDecoded input) `shouldBe` (decoded output)
 
 main :: IO ()
 main = hspec $ do
   describe "convert" $ do
-    it "converts the simple fixture as expected" $ do
-      input <- readFile "fixtures/2/input.json"
-      output <- readFile "fixtures/2/output.json"
-      (convert (pack input)) `shouldBe` (decodeAnalyses (pack output))
-    it "converts the first fixture as expected" $ do
-      input <- readFile "fixtures/1/input.json"
-      output <- readFile "fixtures/1/output.json"
-      (convert (pack input)) `shouldBe` (decodeAnalyses (pack output))
-    it "converts input with a first element in wrong date order" $ do
-      input <- readFile "fixtures/3/input.json"
-      output <- readFile "fixtures/3/output.json"
-      (convert (pack input)) `shouldBe` (decodeAnalyses (pack output))
+    it "first fixture" $ runCase "1"
+    it "simple fixture" $ runCase "2"
+    it "input with a first element in wrong date order" $ runCase "3"

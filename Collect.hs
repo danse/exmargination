@@ -4,7 +4,7 @@ module Collect where
 import Exmargination( Margin, toDailySeries, value, time )
 import Data.DateTime( DateTime )
 import Data.Aeson( encode, eitherDecode, FromJSON, ToJSON )
-import Control.Applicative( (<$>) )
+import Data.Functor( fmap )
 import Data.Typeable
 import Data.Data
 import GHC.Generics
@@ -26,11 +26,6 @@ data Analysis = Analysis {
 instance FromJSON Analysis
 instance ToJSON Analysis
 
-data Analyses = Analyses [Analysis] deriving (Show, Typeable, Data, Generic, Eq)
-
-instance FromJSON Analyses
-instance ToJSON Analyses
-
 collectionToAverage :: [Margin] -> Average
 collectionToAverage c = Average { size=l, Collect.value=v}
   where l = length c
@@ -50,15 +45,9 @@ analyse collection = Analysis { date=date, averages=averages }
 
 collect :: [Margin] -> [Analysis]
 collect [] = []
-collect margins = (analyse margins) : ((collect . tail) margins)
+collect margins = ((collect . tail) margins) ++ [analyse margins]
 
-decodeMargin :: ByteString -> Either String [Margin]
-decodeMargin = eitherDecode
+convert :: [Margin] -> [Analysis]
+convert = collect . reverse . toDailySeries
 
-decodeAnalyses :: ByteString -> Either String Analyses
-decodeAnalyses = eitherDecode
-
-convert :: ByteString -> Either String Analyses
-convert json = (Analyses . reverse . collect . reverse . toDailySeries) <$> decodeMargin json
-
-convertEncode = encode <$> convert
+convertEncode toDecode = fmap (encode . convert) (eitherDecode toDecode)
