@@ -5,10 +5,10 @@ import Data.List( sortBy )
 import Data.Time.Clock( NominalDiffTime,addUTCTime )
 import Data.Ord( compare )
 
-type Accessor a = a -> DateTime
--- the merger gets a list and a date to use for the resulting element
-type Merger a = DateTime -> a -> a -> a
-type Filler a = DateTime -> a
+class Timeserializable a where
+  access :: a -> DateTime
+  merge :: DateTime -> a -> a -> a
+  fill :: DateTime -> a
 
 -- at every call, the recursive function returns a processed list, and
 -- it gets a non processed list and a reference date about the last
@@ -17,23 +17,23 @@ type Filler a = DateTime -> a
 -- created. otherwise, the function will look ahead and merge all
 -- elements within the same interval, pick a representative date for
 -- the merged elements and use it as the new reference
-consume :: Filler a -> Accessor a -> Merger a -> [DateTime] -> [a] -> [a]
-consume create getDate aggregate (t:ts) [] = []
-consume create getDate aggregate (t:ts) elements
-  | length preceding == 0 = (create t) : rest
-  | otherwise = (foldl (aggregate t) (create t) preceding) : rest
-  where (preceding, succeeding) = span ((<= t) . getDate) elements
-        rest = consume create getDate aggregate ts succeeding
+consume :: Timeserializable a => [DateTime] -> [a] -> [a]
+consume (t:ts) [] = []
+consume (t:ts) elements
+  | length preceding == 0 = (fill t) : rest
+  | otherwise = (foldl (merge t) (fill t) preceding) : rest
+  where (preceding, succeeding) = span ((<= t) . access) elements
+        rest = consume ts succeeding
 
 iterator :: NominalDiffTime -> DateTime -> [DateTime]
 iterator interval start = iterate (addUTCTime interval) start
 
-sorter :: Accessor a -> [a] -> [a]
-sorter acc = sortBy (\ x y -> compare (acc x) (acc y))
+sort :: Timeserializable a => [a] -> [a]
+sort = sortBy (\ x y -> compare (access x) (access y))
 
-convert :: Filler a -> Merger a -> Accessor a -> NominalDiffTime -> [a] -> [a]
-convert creator merger acc interval elements =
+convert :: Timeserializable a => NominalDiffTime -> [a] -> [a]
+convert interval elements =
   sampler sorted
-  where sorted = sorter acc elements
-        times = iterator interval (acc (head sorted))
-        sampler = consume creator acc merger times
+  where sorted = sort elements
+        times = iterator interval (access (head sorted))
+        sampler = consume times

@@ -17,19 +17,25 @@ data Margin = Margin {
 instance FromJSON Margin
 instance ToJSON Margin
 
-merge :: UTCTime -> Margin -> Margin -> Margin
-merge t m1 m2 = Margin {
-  value = (value m1) + (value m2),
-  description = (description m1) ++ ", " ++ (description m2),
-  time = t
-  }
+instance To.Timeserializable Margin where
+  access = time
 
-create t = Margin {
-  value = 0,
-  description = "no data related to this period",
-  time = t
-  }
+  merge t m1 m2 =
+    let (Margin { value = v1, description = d1 }) = m1
+        (Margin { value = v2, description = d2 }) = m2
+    in Margin {
+      value = v1 + v2,
+      description = d1 ++ ", " ++ d2,
+      time = t
+      }
+
+  fill t = Margin {
+    value = 0,
+    description = "no data related to this period",
+    time = t
+    }
 
 interval = 60*60*24 :: NominalDiffTime -- one day
 
-toDailySeries = To.convert create merge time interval
+toDailySeries :: [Margin] -> [Margin]
+toDailySeries = To.convert interval
