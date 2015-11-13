@@ -9,6 +9,7 @@ import Data.Typeable
 import Data.Data
 import GHC.Generics
 import Data.ByteString.Lazy( ByteString )
+import Data.Either( rights, Either(Right) )
 
 data Average = Average {
   size :: Int,
@@ -50,4 +51,5 @@ collect margins = ((collect . tail) margins) ++ [analyse margins]
 convert :: [Margin] -> [Analysis]
 convert = collect . reverse . toDailySeries
 
-convertEncode toDecode = fmap (encode . convert) (eitherDecode toDecode)
+convertEncode :: [ByteString] -> ByteString
+convertEncode = encode . convert . concat . rights . (fmap eitherDecode)

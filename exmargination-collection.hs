@@ -5,17 +5,18 @@ import Data.Functor( fmap )
 
 main = do
   args <- getArgs
-  if (length args) /= 2
+  if (length args) < 2
     then
     do
       prog <- getProgName
-      putStrLn $ "usage: " ++ prog ++ " <margin> <result>"
-      putStrLn $ "this will read the `margin` file, convert and write to `result`"
+      putStrLn $ "usage: " ++ prog ++ " <margin> [<margin>...] <result>"
+      putStrLn $ "this will read the `margin` file or files, convert and write to `result`"
     else
-    let [input, output] = args
-        convert i = convertEncode (pack i)
-        write o = writeFile output (unpack o)
+    let inputs = init args
+        output = last args
+        convert = convertEncode . (map pack)
+        write = (writeFile output) . unpack
         complain e = print $ "parsing error: "++ e
     in do
-      i <- readFile input
-      either complain write $ convert i
+      i <- sequence $ map readFile inputs
+      write $ convert i
