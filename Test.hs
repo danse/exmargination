@@ -7,7 +7,7 @@ import Data.Functor( fmap )
 -- i cannot reuse the eitherDecode, because the resulting function
 -- would have the same type signature, while i need different types
 -- for analyses and margins
-convertDecoded input = fmap convert (eitherDecode (pack input))
+convertDecoded input = fmap (convert 1) (eitherDecode (pack input))
 decoded = eitherDecode . pack 
 
 runCase num = do

@@ -48,8 +48,9 @@ collect :: [Margin] -> [Analysis]
 collect [] = []
 collect margins = ((collect . tail) margins) ++ [analyse margins]
 
-convert :: [Margin] -> [Analysis]
-convert = collect . reverse . toDailySeries
+convert :: Int -> [Margin] -> [Analysis]
+convert days = collect . reverse . (toDailySeries days)
 
-convertEncode :: [ByteString] -> ByteString
-convertEncode = encode . convert . concat . rights . (fmap eitherDecode)
+convertEncode :: Int -> [ByteString] -> ByteString
+convertEncode days =
+  encode . (convert days) . concat . rights . (fmap eitherDecode)

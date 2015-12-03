@@ -35,7 +35,7 @@ instance To.Timeserializable Margin where
     time = t
     }
 
-interval = 60*60*24 :: NominalDiffTime -- one day
+oneDay = 60*60*24 :: NominalDiffTime
 
-toDailySeries :: [Margin] -> [Margin]
-toDailySeries = To.convert interval
+toDailySeries :: Int -> [Margin] -> [Margin]
+toDailySeries days = To.convert (oneDay * (fromIntegral days))
