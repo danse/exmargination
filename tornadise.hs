@@ -29,7 +29,7 @@ fillers margins = map zeroMargin days
   where days = marginDays margins
 
 parseMyTime :: String -> Day
-parseMyTime = readTime defaultTimeLocale "%a %b %d %Y %H:%M:%S GMT%z (%Z)"
+parseMyTime = readTime Data.Time.Format.defaultTimeLocale "%FT%XZ"
 
 data Margin = Margin {
   amount :: Int,
@@ -39,9 +39,9 @@ data Margin = Margin {
 
 instance FromJSON Margin where
   parseJSON (Object v) = Margin <$>
-                         v .: "n" <*>
-                         v .: "d" <*>
-                         v .: "t"
+                         v .: "value" <*>
+                         v .: "description" <*>
+                         v .: "time"
   -- parseJSON _ = Nothing
 
 sum :: Margin -> Margin -> Margin
