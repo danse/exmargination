@@ -1,7 +1,8 @@
 {-# LANGUAGE DeriveDataTypeable,DeriveGeneric #-}
 module Collect where
 
-import Exmargination( Margin, toDailySeries, value, time )
+import Exmargination( toDailySeries )
+import Margin( Margin, value, time )
 import Data.DateTime( DateTime )
 import Data.Aeson( encode, eitherDecode, FromJSON, ToJSON )
 import Data.Functor( fmap )
@@ -30,7 +31,7 @@ instance ToJSON Analysis
 collectionToAverage :: [Margin] -> Average
 collectionToAverage c = Average { size=l, Collect.value=v}
   where l = length c
-        s = sum $ map Exmargination.value c
+        s = sum $ map Margin.value c
         v = s / (fromIntegral l)
 
 collectionToAverages :: [Margin] -> [Average]

@@ -22,7 +22,8 @@ executable exmargination-collection
                       time,
                       aeson,
                       bytestring,
-                      optparse-applicative
+                      optparse-applicative,
+                      margin
 
 library
   exposed-modules:     ToTimeSeries, Exmargination, Collect
@@ -32,12 +33,19 @@ library
                        datetime-sb,
                        time,
                        aeson,
-                       bytestring
+                       bytestring,
+                       margin
   -- hs-source-dirs:      
   default-language:    Haskell2010
 
 Test-Suite test
            type: exitcode-stdio-1.0
            main-is: Test.hs
-           build-depends: base, datetime-sb, time, hspec, aeson, bytestring
+           build-depends: base,
+                          datetime-sb,
+                          time,
+                          hspec,
+                          aeson,
+                          bytestring,
+                          margin
            default-language:    Haskell2010

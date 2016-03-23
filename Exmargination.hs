@@ -1,21 +1,9 @@
-{-# LANGUAGE DeriveDataTypeable,DeriveGeneric #-}
 module Exmargination where
 
 import ToTimeSeries as To
-import Data.Time.Clock( NominalDiffTime, UTCTime )
-import Data.Aeson( FromJSON, ToJSON )
-import Data.Typeable
-import Data.Data
-import GHC.Generics
+import Data.Time.Clock( NominalDiffTime )
 
-data Margin = Margin {
-  value :: Float,
-  description :: String,
-  time :: UTCTime
-  } deriving (Show, Data, Typeable, Generic)
-
-instance FromJSON Margin
-instance ToJSON Margin
+import Margin
 
 instance To.Timeserializable Margin where
   access = time
