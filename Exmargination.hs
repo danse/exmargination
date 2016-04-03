@@ -2,6 +2,7 @@ module Exmargination where
 
 import ToTimeSeries as To
 import Data.Time.Clock( NominalDiffTime )
+import Data.DateTime( DateTime )
 
 import Margin
 
@@ -27,3 +28,6 @@ oneDay = 60*60*24 :: NominalDiffTime
 
 toDailySeries :: Int -> [Margin] -> [Margin]
 toDailySeries days = To.convert (oneDay * (fromIntegral days))
+
+toDailySeriesFill :: DateTime -> Int -> [Margin] -> [Margin]
+toDailySeriesFill dateTime days = To.convertFill dateTime (oneDay * (fromIntegral days))

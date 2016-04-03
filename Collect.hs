@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveDataTypeable,DeriveGeneric #-}
 module Collect where
 
-import Exmargination( toDailySeries )
+import Exmargination( toDailySeries, toDailySeriesFill )
 import Margin( Margin, value, time )
 import Data.DateTime( DateTime )
 import Data.Aeson( encode, eitherDecode, FromJSON, ToJSON )
@@ -52,6 +52,13 @@ collect margins = ((collect . tail) margins) ++ [analyse margins]
 convert :: Int -> [Margin] -> [Analysis]
 convert days = collect . reverse . (toDailySeries days)
 
+convertFill :: DateTime -> Int -> [Margin] -> [Analysis]
+convertFill dateTime days = collect . reverse . ((toDailySeriesFill dateTime) days)
+
 convertEncode :: Int -> [ByteString] -> ByteString
 convertEncode days =
   encode . (convert days) . concat . rights . (fmap eitherDecode)
+
+convertEncodeWithTime :: DateTime -> Int -> [ByteString] -> ByteString
+convertEncodeWithTime dateTime days =
+  encode . (convertFill dateTime days) . concat . rights . (fmap eitherDecode)

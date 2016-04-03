@@ -37,3 +37,7 @@ convert interval elements =
   where sorted = sort elements
         times = iterator interval (access (head sorted))
         sampler = consume times
+
+convertFill :: Timeserializable a => DateTime -> NominalDiffTime -> [a] -> [a]
+convertFill dateTime interval elements = convert interval filledElements
+  where filledElements = (fill dateTime):elements
