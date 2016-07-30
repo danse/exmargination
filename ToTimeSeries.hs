@@ -5,10 +5,15 @@ import Data.List( sortBy )
 import Data.Time.Clock( NominalDiffTime,addUTCTime )
 import Data.Ord( compare )
 
-class Timeserializable a where
-  access :: a -> DateTime
-  merge :: DateTime -> a -> a -> a
-  fill :: DateTime -> a
+class Monoid a => Timeserializable a where
+  getTime :: a -> DateTime
+  setTime :: DateTime -> a -> a
+
+merge :: Timeserializable a => DateTime -> a -> a -> a
+merge t a b = setTime t (mappend a b)
+
+fill :: Timeserializable a => DateTime -> a
+fill t = setTime t mempty
 
 -- at every call, the recursive function returns a processed list, and
 -- it gets a non processed list and a reference date about the last
@@ -22,20 +27,20 @@ consume (t:ts) [] = []
 consume (t:ts) elements
   | length preceding == 0 = (fill t) : rest
   | otherwise = (foldl (merge t) (fill t) preceding) : rest
-  where (preceding, succeeding) = span ((<= t) . access) elements
+  where (preceding, succeeding) = span ((<= t) . getTime) elements
         rest = consume ts succeeding
 
 iterator :: NominalDiffTime -> DateTime -> [DateTime]
 iterator interval start = iterate (addUTCTime interval) start
 
 sort :: Timeserializable a => [a] -> [a]
-sort = sortBy (\ x y -> compare (access x) (access y))
+sort = sortBy (\ x y -> compare (getTime x) (getTime y))
 
 convert :: Timeserializable a => NominalDiffTime -> [a] -> [a]
 convert interval elements =
   sampler sorted
   where sorted = sort elements
-        times = iterator interval (access (head sorted))
+        times = iterator interval (getTime (head sorted))
         sampler = consume times
 
 convertFill :: Timeserializable a => DateTime -> NominalDiffTime -> [a] -> [a]
