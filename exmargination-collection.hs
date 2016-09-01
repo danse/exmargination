@@ -3,6 +3,7 @@ import Collect( convertEncode, convertEncodeWithTime )
 import System.Environment
 import Data.ByteString.Lazy.Char8( pack, unpack )
 import Data.Functor( fmap )
+import Data.Monoid( (<>) )
 import Control.Applicative( some )
 import Options.Applicative
 import Data.DateTime( getCurrentTime )
