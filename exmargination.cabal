@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                exmargination
-version:             1.0.0.4
+version:             1.1.2.0
 -- synopsis:            
 -- description:         
 -- license:             
@@ -26,8 +26,32 @@ executable exmargination-collection
                       margin
  default-language:    Haskell2010
 
+executable exmargination-tag-stats
+ main-is: exmargination-tag-stats.hs
+ build-depends:       base,
+                      datetime-sb,
+                      time,
+                      aeson,
+                      bytestring,
+                      optparse-applicative,
+                      margin,
+                      containers
+ default-language:    Haskell2010
+
+executable exmargination-word-stats
+ main-is: exmargination-word-stats.hs
+ build-depends:       base,
+                      datetime-sb,
+                      time,
+                      aeson,
+                      bytestring,
+                      optparse-applicative,
+                      margin,
+                      containers
+ default-language:    Haskell2010
+
 library
-  exposed-modules:     ToTimeSeries, Exmargination, Collect
+  exposed-modules:     ToTimeSeries, Exmargination, Collect, Tags
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base,
@@ -35,7 +59,8 @@ library
                        time,
                        aeson,
                        bytestring,
-                       margin
+                       margin,
+                       containers
   -- hs-source-dirs:      
   default-language:    Haskell2010
 
@@ -48,5 +73,6 @@ Test-Suite test
                           hspec,
                           aeson,
                           bytestring,
-                          margin
+                          margin,
+                          containers
            default-language:    Haskell2010

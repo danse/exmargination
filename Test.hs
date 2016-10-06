@@ -1,5 +1,6 @@
 import Test.Hspec
 import Collect( convert )
+import Tags( getTags )
 import Data.ByteString.Lazy.Char8( pack )
 import Data.Aeson( eitherDecode )
 import Data.Functor( fmap )
@@ -21,3 +22,6 @@ main = hspec $ do
     it "first fixture" $ runCase "1"
     it "simple fixture" $ runCase "2"
     it "input with a first element in wrong date order" $ runCase "3"
+  describe "tags" $ do
+    it "parses tags" ((getTags "#one two #three") `shouldBe` ["one", "three"])
+    it "eliminates doubles" ((getTags "#one #one") `shouldBe` ["one"])
