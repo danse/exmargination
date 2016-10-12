@@ -25,3 +25,5 @@ main = hspec $ do
   describe "tags" $ do
     it "parses tags" ((getTags "#one two #three") `shouldBe` ["one", "three"])
     it "eliminates doubles" ((getTags "#one #one") `shouldBe` ["one"])
+    it "understands truncations" ((getTags "#trun#cated") `shouldBe` ["trun"])
+    it "ignores multiple truncations" ((getTags "#trun#cat#ed") `shouldBe` ["trun"])

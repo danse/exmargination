@@ -3,8 +3,14 @@ module Tags where
 import Data.String (words)
 import qualified Data.Set as Set
 
-isTag [] = False
-isTag (x:xs) = x == '#' && (length xs > 0)
+isTagStart c = c == '#'
 
-getTags = (Set.toList . Set.fromList) . (map (drop 1)) . (filter isTag) . words
+isTag [] = False
+isTag (x:xs) =  isTagStart x && (length xs > 0)
+
+truncateTag = fst . (break isTagStart)
+
+clean = truncateTag . (drop 1)
+
+getTags = (Set.toList . Set.fromList) . (map clean) . (filter isTag) . words
 
