@@ -16,14 +16,16 @@ runCase num = do
   output <- readFile $ "fixtures/"++ num ++"/output.json"
   (convertDecoded input) `shouldBe` (decoded output)
 
+tagCase input output = it input ((getTags input) `shouldBe` output)
+
 main :: IO ()
 main = hspec $ do
   describe "convert" $ do
     it "first fixture" $ runCase "1"
     it "simple fixture" $ runCase "2"
     it "input with a first element in wrong date order" $ runCase "3"
-  describe "tags" $ do
-    it "parses tags" ((getTags "#one two #three") `shouldBe` ["one", "three"])
-    it "eliminates doubles" ((getTags "#one #one") `shouldBe` ["one"])
-    it "understands truncations" ((getTags "#trun#cated") `shouldBe` ["trun"])
-    it "ignores multiple truncations" ((getTags "#trun#cat#ed") `shouldBe` ["trun"])
+  describe "getTags" $ do
+    tagCase "#one two #three" ["one", "three"]
+    tagCase "#one #one" ["one"]
+    tagCase "#trun#cated" ["trun"]
+    tagCase "#trun#cat#ed" ["trun"]
