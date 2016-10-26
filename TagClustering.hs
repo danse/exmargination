@@ -1,4 +1,4 @@
-module Clustering where
+module TagClustering where
 
 import qualified Data.Map as M
 import Data.Maybe (isJust, catMaybes)
