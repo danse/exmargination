@@ -1,7 +1,7 @@
 module ToTimeSeries where
 
 import Data.DateTime( DateTime )
-import Data.List( sortBy )
+import Data.List( sortOn )
 import Data.Time.Clock( NominalDiffTime,addUTCTime )
 import Data.Ord( compare )
 
@@ -33,13 +33,10 @@ consume (t:ts) elements
 iterator :: NominalDiffTime -> DateTime -> [DateTime]
 iterator interval start = iterate (addUTCTime interval) start
 
-sort :: Timeserializable a => [a] -> [a]
-sort = sortBy (\ x y -> compare (getTime x) (getTime y))
-
 convert :: Timeserializable a => NominalDiffTime -> [a] -> [a]
 convert interval elements =
   sampler sorted
-  where sorted = sort elements
+  where sorted = sortOn getTime elements
         times = iterator interval (getTime (head sorted))
         sampler = consume times
 
