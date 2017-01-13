@@ -1,6 +1,6 @@
 import Margin
 import System.Environment (getArgs)
-import Streamgraph (streamgraphAggregate)
+import Streamgraph (streamgraph)
 import Data.Text (pack)
 import Tags (getTags)
 
@@ -11,4 +11,4 @@ toStreamData (Margin value desc time) = (pack tagOrNot, value, time)
 main = do
   args <- getArgs
   margins <- getAllMargins args
-  (streamgraphAggregate . map toStreamData) margins
+  (streamgraph . map toStreamData) margins
