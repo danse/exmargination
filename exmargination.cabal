@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                exmargination
-version:             1.2.0.0
+version:             1.3.0.0
 -- synopsis:            
 -- description:         
 -- license:             
@@ -32,12 +32,11 @@ executable exmargination-streamgraph
 executable exmargination-collection
  main-is: exmargination-collection.hs
  build-depends:       base,
-                      datetime-sb,
-                      time,
-                      aeson,
+                      text,
                       bytestring,
                       optparse-applicative,
-                      margin
+                      margin,
+                      collection-graph
  default-language:    Haskell2010
 
 executable exmargination-tag-stats
@@ -65,7 +64,7 @@ executable exmargination-word-stats
  default-language:    Haskell2010
 
 library
-  exposed-modules:     ToTimeSeries, Exmargination, Collect, Tags
+  exposed-modules:     Tags
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base,
