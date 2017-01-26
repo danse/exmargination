@@ -4,6 +4,8 @@ import qualified Data.Map as M
 import Data.Maybe (isJust, catMaybes)
 import Data.List (sortOn, filter, uncons)
 import Data.Functor (fmap)
+import Data.Set (Set)
+import qualified Data.Set as Set
 
 i = [
   [1, 2, 3],
@@ -58,3 +60,26 @@ minority = sortSnd id
 -- >>> cluster minority i
 -- [1,2,3]
 cluster f i = f (getStats i) i
+
+stop = Set.fromList [
+  "this",
+  "and",
+  "the",
+  "a",
+  "to",
+  "about",
+  "of",
+  "from",
+  "with",
+  "some",
+  "my",
+  "for",
+  "mainly"
+  ]
+
+removeStops = filter ((flip Set.notMember) stop)
+
+-- | autoCategorise
+-- >>> autoCategorise ["write this a bit", "write this more", "chat on this"]
+-- ["write","write","on"]
+autoCategorise = cluster majority . map (removeStops . words)
