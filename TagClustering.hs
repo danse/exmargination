@@ -74,7 +74,9 @@ stop = Set.fromList [
   "some",
   "my",
   "for",
-  "mainly"
+  "mainly",
+  "it",
+  "on"
   ]
 
 removeStops = filter ((flip Set.notMember) stop)
