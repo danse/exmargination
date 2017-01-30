@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                exmargination
-version:             1.4.1.0
+version:             1.4.2.0
 -- synopsis:            
 -- description:         
 -- license:             
@@ -37,6 +37,16 @@ executable exmargination-collection
                       optparse-applicative,
                       margin,
                       collection-graph
+ default-language:    Haskell2010
+
+executable exmargination-tornado
+ main-is: exmargination-tornado.hs
+ build-depends:       base,
+                      text,
+                      bytestring,
+                      optparse-applicative,
+                      margin,
+                      retornado
  default-language:    Haskell2010
 
 executable exmargination-tag-stats
