@@ -12,16 +12,14 @@ import qualified Data.Text as T
 data Options = Options {
   days :: Int,
   fill :: Bool,
-  inputs :: [String]
+  arguments :: [String]
   }
 
 optionParser :: Parser Options
 optionParser = Options
                <$> option auto (long "days" <> short 'd' <> Options.Applicative.value 1)
                <*> switch (long "fill" <> short 'f')
-               <*> some (strOption (long "input"
-                                    <> short 'i'
-                                    <> metavar "INPUT_MARGIN_FILE"))
+               <*> some (argument str (metavar "INPUT_MARGIN_FILES ..."))
 
 optionParserInfo :: ParserInfo Options
 optionParserInfo = info optionParser fullDesc
@@ -30,7 +28,7 @@ toGraphData (Margin value desc time) = (T.pack desc, value, time)
 
 collection :: Options -> IO ()
 collection Options {..} = do
-    margins <- getAllMargins inputs
+    margins <- getAllMargins arguments
     (collectionGraph days . map toGraphData) margins
 
 main = execParser optionParserInfo >>= collection
