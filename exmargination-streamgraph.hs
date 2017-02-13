@@ -4,6 +4,9 @@ import Streamgraph (streamgraph)
 import Data.Text (pack)
 import Tags (getTags)
 import TagClustering (autoCategorise)
+import Control.Applicative( some )
+import Options.Applicative
+import Data.Monoid( (<>) )
 
 toStreamData (Margin value desc time) = (pack desc, value, time)
 
@@ -17,8 +20,22 @@ mapToDescs f margins = map updateDesc (zip descs margins)
   where descs = (f . map description) margins
         updateDesc (desc, margin)  = margin { description = desc }
 
+data Options = Options {
+  days :: Int,
+  fill :: Bool,
+  arguments :: [String]
+  }
+
+optionParser :: Parser Options
+optionParser = Options
+               <$> option auto (long "days" <> short 'd' <> Options.Applicative.value 1)
+               <*> switch (long "fill" <> short 'f')
+               <*> some (argument str (metavar "INPUT_MARGIN_FILES ..."))
+
+optionParserInfo :: ParserInfo Options
+optionParserInfo = info optionParser fullDesc
+
 main = do
-  args <- getArgs
-  margins <- getAllMargins args
-  (streamgraph . map toStreamData . mapToDescs autoCategorise) margins
-  --(streamgraph . map toStreamData) margins
+  options <- execParser optionParserInfo
+  margins <- getAllMargins (arguments options)
+  (streamgraph (days options) . map toStreamData . mapToDescs autoCategorise) margins
