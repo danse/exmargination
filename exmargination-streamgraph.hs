@@ -39,7 +39,7 @@ optionParserInfo = info optionParser fullDesc
 maybeFill False margins = return margins
 maybeFill True margins = do
   t <- getCurrentTime
-  return ("", 0, t):margins
+  return (Margin 0 "" t:margins)
 
 main = do
   options <- execParser optionParserInfo
