@@ -7,6 +7,7 @@ import TagClustering (autoCategorise)
 import Control.Applicative( some )
 import Options.Applicative
 import Data.Monoid( (<>) )
+import Data.Time.Clock (getCurrentTime)
 
 toStreamData (Margin value desc time) = (pack desc, value, time)
 
@@ -35,7 +36,13 @@ optionParser = Options
 optionParserInfo :: ParserInfo Options
 optionParserInfo = info optionParser fullDesc
 
+maybeFill False margins = return margins
+maybeFill True margins = do
+  t <- getCurrentTime
+  return ("", 0, t):margins
+
 main = do
   options <- execParser optionParserInfo
   margins <- getAllMargins (arguments options)
-  (streamgraph (days options) . map toStreamData . mapToDescs autoCategorise) margins
+  maybeFilled <- maybeFill (fill options) margins
+  (streamgraph (days options) . map toStreamData . mapToDescs autoCategorise) maybeFilled
