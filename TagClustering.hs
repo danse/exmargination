@@ -82,10 +82,15 @@ stop = Set.fromList [
 
 removeStops = filter ((flip Set.notMember) stop)
 
+describeEmpty [] = ["~ empty ~"]
+describeEmpty s = s
+
 -- | autoCategorise
 -- >>> autoCategorise ["write this a bit", "write this more", "chat on this"]
--- ["write","write","on"]
-autoCategorise = cluster majority . map (removeStops . words)
+-- ["write","write","chat"]
+-- >>> autoCategorise ["something", ""]
+-- ["something","~ empty ~"]
+autoCategorise = cluster majority . map (describeEmpty . removeStops . words)
 
 mapToDescs f margins = map updateDesc (zip descs margins)
   where descs = (f . map description) margins

@@ -1,6 +1,6 @@
 import Test.Hspec
 import Tags (getTags)
-import TagClustering (autoCategoriseAll)
+import TagClustering (autoCategoriseAll, autoCategorise)
 import Data.ByteString.Lazy.Char8 (pack)
 import Data.Aeson (eitherDecode)
 import Data.Functor (fmap)
@@ -15,9 +15,13 @@ tagCase input output = it input ((getTags input) `shouldBe` output)
 makeUni :: Integer -> Int -> Int -> UTCTime
 makeUni y m d = UTCTime (fromGregorian y m d) (secondsToDiffTime 0)
 
-preservesLength :: [Margin] -> Bool
-preservesLength m = length m == length p
-  where p = autoCategoriseAll m
+preservesLength :: ([a] -> [a]) -> [a] -> Bool
+preservesLength f m = length m == length (f m)
+
+autoAllPreservesLength :: [Margin] -> Bool
+autoAllPreservesLength = preservesLength autoCategoriseAll
+
+autoCatPreservesLength = preservesLength autoCategorise
 
 instance Arbitrary Margin where
   arbitrary = do
@@ -36,4 +40,6 @@ main = hspec $ do
     tagCase "#trun#cated" ["trun"]
     tagCase "#trun#cat#ed" ["trun"]
   describe "autoCategoriseAll" $ do
-    it "preserves length" $ property preservesLength
+    it "preserves length" $ property autoAllPreservesLength
+  describe "autoCategorise" $ do
+    it "preserves length" $ property autoCatPreservesLength

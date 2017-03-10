@@ -35,4 +35,4 @@ main = do
   options <- execParser optionParserInfo
   margins <- getAllMargins (arguments options)
   maybeFilled <- maybeFill (fill options) margins
-  (streamgraph (days options) . map toStreamData . autoCategoriseMargins) maybeFilled
+  (streamgraph (days options) . map toStreamData . autoCategoriseAll) maybeFilled
