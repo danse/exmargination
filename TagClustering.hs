@@ -6,6 +6,7 @@ import Data.List (sortOn, filter, uncons)
 import Data.Functor (fmap)
 import Data.Set (Set)
 import qualified Data.Set as Set
+import Margin
 
 i = [
   [1, 2, 3],
@@ -85,3 +86,10 @@ removeStops = filter ((flip Set.notMember) stop)
 -- >>> autoCategorise ["write this a bit", "write this more", "chat on this"]
 -- ["write","write","on"]
 autoCategorise = cluster majority . map (removeStops . words)
+
+mapToDescs f margins = map updateDesc (zip descs margins)
+  where descs = (f . map description) margins
+        updateDesc (desc, margin)  = margin { description = desc }
+
+autoCategoriseAll = mapToDescs autoCategorise
+

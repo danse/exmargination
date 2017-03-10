@@ -3,17 +3,13 @@ import System.Environment (getArgs)
 import Streamgraph (streamgraph)
 import Data.Text (pack)
 import Tags (getTags)
-import TagClustering (autoCategorise)
+import TagClustering (autoCategoriseAll)
 import Control.Applicative( some )
 import Options.Applicative
 import Data.Monoid( (<>) )
 import Data.Time.Clock (getCurrentTime)
 
 toStreamData (Margin value desc time) = (pack desc, value, time)
-
-mapToDescs f margins = map updateDesc (zip descs margins)
-  where descs = (f . map description) margins
-        updateDesc (desc, margin)  = margin { description = desc }
 
 data Options = Options {
   days :: Int,
@@ -39,4 +35,4 @@ main = do
   options <- execParser optionParserInfo
   margins <- getAllMargins (arguments options)
   maybeFilled <- maybeFill (fill options) margins
-  (streamgraph (days options) . map toStreamData . mapToDescs autoCategorise) maybeFilled
+  (streamgraph (days options) . map toStreamData . autoCategoriseMargins) maybeFilled
