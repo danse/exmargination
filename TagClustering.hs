@@ -7,6 +7,7 @@ import Data.Functor (fmap)
 import Data.Set (Set)
 import qualified Data.Set as Set
 import Margin
+import Data.Char (toLower)
 
 i = [
   [1, 2, 3],
@@ -88,9 +89,10 @@ describeEmpty s = s
 -- | autoCategorise
 -- >>> autoCategorise ["write this a bit", "write this more", "chat on this"]
 -- ["write","write","chat"]
--- >>> autoCategorise ["something", ""]
+-- >>> autoCategorise ["Something", ""]
 -- ["something","~ empty ~"]
-autoCategorise = cluster majority . map (describeEmpty . removeStops . words)
+autoCategorise = cluster majority . map preprocess
+  where preprocess = describeEmpty . removeStops . words . map toLower
 
 mapToDescs f margins = map updateDesc (zip descs margins)
   where descs = (f . map description) margins
