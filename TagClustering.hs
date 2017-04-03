@@ -87,13 +87,18 @@ removeStops = filter ((flip Set.notMember) stop)
 describeEmpty [] = ["~ empty ~"]
 describeEmpty s = s
 
+exclude p = filter (not . p)
+
+belongs = flip elem
+
 -- | autoCategorise
--- >>> autoCategorise ["write this a bit", "write this more", "chat on this"]
+-- >>> autoCategorise ["write, this a bit", "write this more", "chat on this"]
 -- ["write","write","chat"]
 -- >>> autoCategorise ["Something", ""]
 -- ["something","~ empty ~"]
 autoCategorise = cluster majority . map preprocess
-  where preprocess = describeEmpty . removeStops . words . map toLower
+  where preprocess = describeEmpty . removeStops . tokenise
+        tokenise = words . map toLower . exclude (belongs ",.!?;")
 
 mapToDescs f margins = map updateDesc (zip descs margins)
   where descs = (f . map description) margins
