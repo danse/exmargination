@@ -1,21 +1,20 @@
-import Data.Map (insertWith, toList, empty)
-import Margin (onAllMargins, value, description)
+import Data.Map (toList, fromListWith)
+import Margin (onAllMargins, Margin(..))
 import System.Environment (getArgs)
 import Data.List (sortOn)
 import Data.Tuple (snd)
+import Tag.Clustering (autoCategoriseAll)
 
-valToTags margin = map addQuantity tags
-  where tags = (words . description) margin
-        v = value margin
-        addQuantity t = (t, v)
+aggregateMargins :: [Margin] -> [(String, Float)]
+aggregateMargins =
+  let toPair (Margin f d _) = (d, f)
+  in sortOn snd . toList . fromListWith (+) . fmap toPair
 
-expand margins = (concat . (map valToTags)) margins
+process :: [Margin] -> String
+process = unlines . fmap show . aggregateMargins . autoCategoriseAll
 
-reduce tagsAndVals = foldr insert empty tagsAndVals
-  where insert (t, v) = insertWith (+) t v
+wordStats :: [FilePath] -> IO ()
+wordStats paths = onAllMargins paths process
 
-process = unlines . map show . reverse . (sortOn snd) . toList . reduce . expand
-
-main = do
-  args <- getArgs
-  onAllMargins args process
+main :: IO ()
+main = getArgs >>= wordStats

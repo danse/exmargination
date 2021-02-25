@@ -29,6 +29,6 @@ toGraphData (Margin value desc time) = (T.pack desc, value, time)
 collection :: Options -> IO ()
 collection Options {..} = do
     margins <- getAllMargins arguments
-    (collectionGraph days . map toGraphData) margins
+    (collectionGraph days fill . map toGraphData) margins
 
 main = execParser optionParserInfo >>= collection

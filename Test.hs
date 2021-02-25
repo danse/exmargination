@@ -1,6 +1,6 @@
 import Test.Hspec
-import Tags (getTags)
-import TagClustering (autoCategoriseAll, autoCategorise)
+import Tag (getTags)
+import Tag.Clustering (autoCategoriseAll, autoCategorise)
 import Data.ByteString.Lazy.Char8 (pack)
 import Data.Aeson (eitherDecode)
 import Data.Functor (fmap)

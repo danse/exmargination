@@ -1,4 +1,4 @@
-module Tags where
+module Tag where
 
 import Data.String (words)
 import qualified Data.Set as Set

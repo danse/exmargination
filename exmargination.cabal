@@ -18,7 +18,7 @@ cabal-version:       >=1.10
 executable exmargination-streamgraph
  main-is: exmargination-streamgraph.hs
  build-depends:       base,
-                      datetime-sb,
+                      datetime,
                       time,
                       aeson,
                       bytestring,
@@ -26,7 +26,8 @@ executable exmargination-streamgraph
                       margin,
                       streamgraph,
                       text,
-                      containers
+                      containers,
+                      exmargination
  default-language:    Haskell2010
 
 executable exmargination-collection
@@ -52,46 +53,49 @@ executable exmargination-tornado
 executable exmargination-tag-stats
  main-is: exmargination-tag-stats.hs
  build-depends:       base,
-                      datetime-sb,
+                      datetime,
                       time,
                       aeson,
                       bytestring,
                       optparse-applicative,
                       margin,
-                      containers
+                      containers,
+                      exmargination
  default-language:    Haskell2010
 
 executable exmargination-word-stats
  main-is: exmargination-word-stats.hs
  build-depends:       base,
-                      datetime-sb,
+                      datetime,
                       time,
                       aeson,
                       bytestring,
                       optparse-applicative,
                       margin,
-                      containers
+                      containers,
+                      exmargination
  default-language:    Haskell2010
 
 library
-  exposed-modules:     Tags
+  hs-source-dirs:      src
+  exposed-modules:     Tag
+                       Tag.Clustering
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base,
-                       datetime-sb,
+                       datetime,
                        time,
                        aeson,
                        bytestring,
                        margin,
                        containers
-  -- hs-source-dirs:      
   default-language:    Haskell2010
 
 Test-Suite test
            type: exitcode-stdio-1.0
            main-is: Test.hs
            build-depends: base,
-                          datetime-sb,
+                          datetime,
                           time,
                           hspec,
                           aeson,
@@ -100,3 +104,5 @@ Test-Suite test
                           containers,
                           QuickCheck
            default-language:    Haskell2010
+
+           

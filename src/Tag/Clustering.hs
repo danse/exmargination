@@ -1,4 +1,4 @@
-module TagClustering where
+module Tag.Clustering where
 
 import qualified Data.Map as M
 import Data.Maybe (isJust, catMaybes)
@@ -79,7 +79,9 @@ stop = Set.fromList [
   "mainly",
   "it",
   "on",
-  "in"
+  "in",
+  --spanish
+  "y"
   ]
 
 removeStops = filter ((flip Set.notMember) stop)

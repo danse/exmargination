@@ -3,7 +3,7 @@ import Margin (onAllMargins, value, description)
 import System.Environment (getArgs)
 import Data.List (sortOn)
 import Data.Tuple (snd)
-import Tags (getTags)
+import Tag (getTags)
 
 valToTags margin = map addQuantity tags
   where tags = getTags (description margin)
@@ -15,7 +15,7 @@ expand margins = (concat . (map valToTags)) margins
 reduce tagsAndVals = foldr insert empty tagsAndVals
   where insert (t, v) = insertWith (+) t v
 
-process = unlines . map show . reverse . (sortOn snd) . toList . reduce . expand
+process = unlines . map show . reverse . sortOn snd . toList . reduce . expand
 
 main = do
   args <- getArgs
