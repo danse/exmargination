@@ -86,7 +86,7 @@ stop = Set.fromList [
 
 removeStops = filter ((flip Set.notMember) stop)
 
-describeEmpty [] = ["~ empty ~"]
+describeEmpty [] = [""]
 describeEmpty s = s
 
 exclude p = filter (not . p)
@@ -97,7 +97,7 @@ belongs = flip elem
 -- >>> autoCategorise ["write, this a bit", "write this more", "chat on this"]
 -- ["write","write","chat"]
 -- >>> autoCategorise ["Something", ""]
--- ["something","~ empty ~"]
+-- ["something",""]
 autoCategorise = cluster majority . map preprocess
   where preprocess = describeEmpty . removeStops . tokenise
         tokenise = words . map toLower . exclude (belongs ",.!?;")
