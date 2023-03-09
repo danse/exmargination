@@ -2,7 +2,6 @@ import Margin
 import System.Environment (getArgs)
 import Streamgraph (streamgraph)
 import Data.Text (pack)
-import Tag (getTags)
 import Tag.Clustering (autoCategoriseAll)
 import Control.Applicative( some )
 import Options.Applicative
