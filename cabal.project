@@ -1,0 +1,14 @@
+packages: exmargination.cabal
+
+repository web-output
+        url: file+noindex:///home/francesco/hub/web-output/dist-newstyle/sdist/
+repository margin
+        url: file+noindex:///home/francesco/hub/margin/dist-newstyle/sdist/
+repository visie
+        url: file+noindex:///home/francesco/hub/visie/dist-newstyle/sdist/
+repository retornado
+        url: file+noindex:///home/francesco/hub/retornado/dist-newstyle/sdist/
+repository collection-graph
+        url: file+noindex:///home/francesco/hub/collection/dist-newstyle/sdist/
+repository streamgraph
+        url: file+noindex:///home/francesco/hub/streamgraph/dist-newstyle/sdist/
