@@ -6,7 +6,7 @@ import Data.List (sortOn, filter, uncons)
 import Data.Functor (fmap)
 import Data.Set (Set)
 import qualified Data.Set as Set
-import Margin
+import Margin hiding (catMaybes)
 import Data.Char (toLower)
 
 i = [

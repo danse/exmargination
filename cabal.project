@@ -1,7 +1,7 @@
 packages: exmargination.cabal
 
-repository web-output
-        url: file+noindex:///home/marea/hub/web-output/dist-newstyle/sdist/
+repository browse
+        url: file+noindex:///home/marea/hub/browse/dist-newstyle/sdist/
 repository visie
         url: file+noindex:///home/marea/hub/visie/dist-newstyle/sdist/
 repository retornado
