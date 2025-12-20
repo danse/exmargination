@@ -26,8 +26,8 @@ s = M.fromList [
   ]
 
 -- | get stats
--- >>> getStats i
--- fromList [(1,4),(2,3),(3,2),(4,1)]
+-- >>> getStats i == s
+-- True
 getStats :: Ord a => [[a]] -> M.Map a Integer
 getStats = foldr (\x -> M.insertWith (+) x 1) M.empty . concat
 
