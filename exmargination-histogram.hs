@@ -18,7 +18,7 @@ main = do
     values
     defPlot
     { legendPos = LegendBottom
-    , xFormatter = \_ _ v -> T.pack (show v)
+    , xFormatter = \_ _ v -> T.pack (show (round v :: Int))
     , xNumTicks = 10
     , yNumTicks = 5
     , plotTitle = "Margin Values (hours)"
