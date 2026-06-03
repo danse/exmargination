@@ -16,4 +16,4 @@ process = unlines . map show . reverse . sortOn snd . toList . reduce . expand
 
 main = do
   args <- getArgs
-  onAllMargins args process
+  onAllMargins process args

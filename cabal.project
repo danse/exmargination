@@ -10,5 +10,13 @@ repository collection-graph
         url: file+noindex:///home/marea/hub/collection/dist-newstyle/sdist/
 repository streamgraph
         url: file+noindex:///home/marea/hub/streamgraph/dist-newstyle/sdist/
-repository margin
-        url: file+noindex:///home/marea/hub/margin/dist-newstyle/sdist/
+
+source-repository-package
+        type: git
+        location: git@github.com:danse/margin.git
+        tag: 0.5.1.0
+
+source-repository-package
+        type: git
+        location: git@github.com:danse/seline.git
+        tag: 0.3.1.0

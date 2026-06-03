@@ -13,8 +13,8 @@ aggregateMargins =
 process :: [Margin] -> String
 process = unlines . fmap show . aggregateMargins . autoCategoriseAll
 
-wordStats :: [FilePath] -> IO ()
-wordStats paths = onAllMargins paths process
+wordStats :: [FilePath] -> IO [String]
+wordStats paths = onAllMargins process paths
 
-main :: IO ()
+main :: IO [String]
 main = getArgs >>= wordStats
