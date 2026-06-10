@@ -1,4 +1,4 @@
-packages: exmargination.cabal
+packages: .
 
 repository browse
         url: file+noindex:///home/marea/hub/browse/dist-newstyle/sdist/
@@ -15,8 +15,3 @@ source-repository-package
         type: git
         location: git@github.com:danse/margin.git
         tag: 0.6.0.0
-
-source-repository-package
-        type: git
-        location: git@github.com:danse/seline.git
-        tag: 0.3.1.0
